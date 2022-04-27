@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminCategorRequest;
-use App\Models\Admin\Category;
 
-class AdminController extends Controller
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductColorRequest;
+use App\Models\Admin\Color;
+
+class ProductColorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $categories =  Category::get();
-        return view('admin.adminHome',compact('categories'));
+        $colors =  Color::get();
+        return view('admin.productColor',compact('colors'));
     }
 
     /**
@@ -25,30 +26,24 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $categories =  Category::get();
-        return view('admin.createCategory',compact('categories'));
+       return view('admin.productCreateColor');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function store(AdminCategorRequest $request)
+    public function store(ProductColorRequest $request)
     {
-        $category = new Category;
-        $category->category_name = $request->category_name;
-        if ($request['category_status']) {
-            $category->parent_id = $request->category_status;
-        }
-        $save = $category->save();
+        $ProductColor = new Color;
+        $ProductColor->color = $request->color;
+        $save = $ProductColor->save();
         if ($save) {
             return $this->index();
         }
-
         return back()->with('fail', 'Something went wrong,try again later');
-
     }
 
     /**
@@ -70,10 +65,8 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-
-        $edit_category = Category::find($id);
-        $categories = Category::get();
-        return view('admin.editCategory',compact('edit_category','categories'));
+        $edit_color = Color::find($id);
+        return view('admin.editColor',compact('edit_color'));
     }
 
     /**
@@ -83,17 +76,16 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AdminCategorRequest $request, $id)
+    public function update(ProductColorRequest $request, $id)
     {
-        $category = Category::find($id);
-        if (!$category) {
+        $color = Color::find($id);
+        if (!$color) {
             return redirect()->back();
         }
-        $category->update([
-                "category_name" => $request->category_name,
-                "parent_id" => $request->category_status,
-            ]);
-            return redirect()->route('admin.index');
+        $color->update([
+            "color" => $request->color,
+        ]);
+        return redirect()->route('adminColor.index');
     }
 
     /**
@@ -104,17 +96,14 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        if (!$category) {
+        $color = Color::find($id);
+
+        if (!$color) {
             return redirect()->back();
         }
 
-        $category->delete();
+        $color->delete();
         return response()->json();
     }
 
-    public function cancel()
-    {
-        return $this->index();
-    }
 }

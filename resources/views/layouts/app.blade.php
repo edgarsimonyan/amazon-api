@@ -12,16 +12,24 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://kenwheeler.github.io/slick/slick/slick-theme.css"/>
+
+
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
+        <div class="fixed-top">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -105,14 +113,38 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="#">Sell</a>
                             </li>
+                            @if(session('user'))
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="{{route('product.create')}}">Add Product</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="{{route('product.myProducts',session('user')['id'])}}">My Products</a>
+                                </li>
+                            @endif
+                            @if(session('isAdmin'))
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="{{route('admin.index')}}">Admin</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </nav>
             </div>
         </div>
-
-        <main class="py-4">
-            @yield('content')
+        </div>
+        <main class="py-4" style="margin-top: 110px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="category-list">
+                            categories
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        @yield('content')
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </body>

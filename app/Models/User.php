@@ -43,6 +43,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -51,11 +52,22 @@ class User extends Authenticatable
     public function isAdmin()
     {
 
-        return $this->role->name === 'admin';
+      if( $this->role->name === 'admin') {
+          return true;
+      }
+      return false;
     }
 
     public function isCustomer()
     {
-        return $this->role->name === 'user';
+        if ($this->role->name === 'user') {
+            return true;
+        }
+        return false;
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

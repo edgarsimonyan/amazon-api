@@ -1,6 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ProductColorController;
+use App\Http\Controllers\Admin\ProductSizeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,19 +19,42 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[WelcomeController::class, 'index'])->name('welcome.index');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group([
-    'namespace' => 'Auth',
-    'middleware' => 'auth'
+    'middleware' => 'auth',
+
 ], function () {
-    Route::get('admin', AdminController::class, ['names' => ['index' => 'admin.index']]);
+
+    Route::post('/addImage/{id}', [ProductController::class,'addProductImage'])->name('product.addProductImage');
+    Route::put('/mainImage/', [ProductController::class,'mainImage'])->name('product.mainImage');
+    Route::delete('/removeImage/{id}', [ProductController::class,'removeImage'])->name('product.removeImage');
+    Route::get('/allProducts/{id}', [ProductController::class,'myProducts'])->name('product.myProducts');
+
+Route::group([
+    'middleware' => 'isAdmin',
+],function(){
+        Route::get('/adminColor/back/', function () {
+            return redirect()->route('adminColor.index');
+        });
+        Route::get('/adminSize/back/', function () {
+            return redirect()->route('adminSize.index');
+        });
+        Route::get('/admin/back/', function () {
+            return redirect()->route('admin.index');
+        });
+
+        Route::resource('admin', AdminController::class);
+        Route::resource('adminSize', ProductSizeController::class);
+        Route::resource('adminColor', ProductColorController::class);
 });
+
+});
+
+Route::resource('product', ProductController::class);
 
 
