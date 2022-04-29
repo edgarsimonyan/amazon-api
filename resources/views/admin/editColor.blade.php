@@ -12,7 +12,7 @@
             <button type="submit" class="btn btn-primary mt-4 add-menu-item">Edit</button>
         </form>
         <div>
-            <a href="{{ url('adminColor/back') }}" class="d-inline-block"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
+            <a href="{{ route('adminColor.index') }}" class="d-inline-block"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
         </div>
     </div>
     <script type="text/javascript">

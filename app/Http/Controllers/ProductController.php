@@ -23,7 +23,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::get();
-        return view('welcome', compact('products'));
+
+        return view('product.welcome', compact('products'));
     }
 
     /**
@@ -36,6 +37,7 @@ class ProductController extends Controller
         $colors = Color::get();
         $sizes = Size::get();
         $categories = Category::get();
+
         return view('product.product', compact('colors', 'sizes', 'categories'));
     }
 
@@ -49,6 +51,8 @@ class ProductController extends Controller
     {
         $colors = [];
         $sizes = [];
+        $data[] = [];
+
         foreach ($request->colors as $color) {
             if ($color) {
                 array_push($colors, $color);
@@ -82,13 +86,16 @@ class ProductController extends Controller
         for ($i = 0; $i < count($request->images); $i++) {
             $image_name = time() . $i . '.' . $request->images[$i]->extension();
             $request->images[$i]->move(public_path('images/product-images'), $image_name);
-            $product->productImages()->create([
-                "image_name" => $image_name,
-            ]);
+
+            $data[$i] =
+                [
+                    'product_id' => $product->id,
+                    'image_name' => $image_name,
+                ];
         }
+        $product->productImages()->insert($data);
 
         return redirect()->route('product.index');
-
     }
 
     /**
@@ -102,7 +109,9 @@ class ProductController extends Controller
         $product = Product::find($id);
         $images = $product->productImages()->get();
         $colors = $product->colors()->get();
-        return view('productShow', compact('product', 'images', 'colors'));
+        $sizes = $product->sizes()->get();
+
+        return view('product.productShow', compact('product', 'images', 'colors','sizes'));
     }
 
     /**
@@ -115,14 +124,27 @@ class ProductController extends Controller
     {
         $product = Product::where('user_id', session('user')['id'])->find($id);
         if ($product) {
+            $productSizes = [];
+            $productColors = [];
+
             $images = $product->productImages()->get();
-            $productSizes = $product->sizes()->get();
-            $productColors = $product->colors()->get();
+            $productSize = $product->sizes()->get();
+            for ($i = 0; $i < count($productSize); $i++) {
+                array_push($productSizes, $productSize[$i]->id);
+            }
+
+            $productColor = $product->colors()->get();
+            for ($k = 0; $k < count($productColor); $k++) {
+                array_push($productColors, $productColor[$k]->id);
+            }
+
             $sizes = Size::all();
             $categories = Category::all();
             $colors = Color::all();
-            return view('productEdit', compact('product', 'images', 'sizes', 'colors', 'categories', 'productColors', 'productSizes'));
+
+            return view('product.productEdit', compact('product', 'images', 'sizes', 'colors', 'categories', 'productColors', 'productSizes'));
         }
+
         return redirect()->back();
     }
 
@@ -160,7 +182,8 @@ class ProductController extends Controller
             $product->colors()->sync($colors);
             $product->sizes()->sync($sizes);
             if ($update) {
-                return $this->index();
+
+                return redirect()->route('product.index');
             }
         }
     }
@@ -173,8 +196,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find(session('user')['id']);
-        $product = $user->products()->find($id);
+
+        $product = Auth::user()->products()->find($id);
         if (!$product) {
             return redirect()->back();
         }
@@ -191,28 +214,33 @@ class ProductController extends Controller
         if (session('isAdmin') || $id == session('user')['id']) {
             $user = User::find($id);
             $products = $user->products()->get();
-            return view('userProducts', compact('products'));
+            return view('product.userProducts', compact('products'));
         }
+
         return redirect()->back();
-
-
     }
 
     public function addProductImage(ProductImagesRequest $request, $id)
     {
         $user_id = Auth::user()['id'];
         $product = Product::where('user_id', $user_id)->find($id);
+        $data[] = [];
         if ($product) {
             for ($i = 0; $i < count($request->images); $i++) {
                 $image_name = time() . $i . '.' . $request->images[$i]->extension();
                 $request->images[$i]->move(public_path('images/product-images'), $image_name);
-                $product->productImages()->create([
-                    "image_name" => $image_name,
-                ]);
-            }
-        }
-        return redirect()->back();
+                $data[$i] =
+                      [
+                        'product_id' => $id,
+                        'image_name' => $image_name,
+                    ];
 
+            }
+            $product->productImages()->insert($data);
+
+        }
+
+        return redirect()->back();
     }
 
     public function removeImage(Request $request, $id)
@@ -232,7 +260,9 @@ class ProductController extends Controller
         $product = Product::find($request->product_id);
         if ($product) {
             $product->update(
-                ['main' => $request->image_name]
+                [
+                    'main' => $request->image_name
+                ]
             );
         }
         return redirect()->back();

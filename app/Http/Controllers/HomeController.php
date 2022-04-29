@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -29,13 +30,15 @@ class HomeController extends Controller
         $user = User::find(Auth::id());
         if ($user->isAdmin()) {
             Session::put('isAdmin', $user);
+
             return redirect()->route('admin.index');
         }
         else if ($user->isCustomer()) {
             Session::put('user', $user);
         }
         $products = Product::all();
+        $categories = Category::with('subCategories')->whereNull('parent_id')->get();
 
-        return view('welcome',compact('products'));
+        return view('product.welcome',compact('products','categories'));
     }
 }

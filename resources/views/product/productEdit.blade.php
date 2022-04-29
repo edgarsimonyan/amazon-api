@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <div>
+        <a href="{{route('home')}}" class="back"><i class="fa fa-long-arrow-left go-back" aria-hidden="true"></i><span class="back-text">back</span></a>
+    </div>
     <div class="container">
         <h1>Edit Product</h1>
         <div class="row">
@@ -39,12 +42,9 @@
                                 @foreach ($colors as $color)
                                     <li class="d-inline-block check-color" data-id="{{$color->id}}"
                                         style="width: 35px; height: 35px; background-color: {{$color->color}}">
-                                        @foreach ($productColors as $productColor)
-
-                                            @if ($color->id === $productColor->id)
+                                            @if (in_array($color->id,$productColors))
                                                 <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>
                                             @endif
-                                        @endforeach
                                         <input type="hidden" name="colors[]" value="{{ $color->id }}">
                                     </li>
                                 @endforeach
@@ -57,11 +57,9 @@
                         <ul class="d-flex">
                             @foreach($sizes as $size)
                                 <li data-id="{{$size->id}}" class="check-size">{{$size->size}}
-                                    @foreach ($productSizes as $productSize)
-                                        @if ($size->id === $productSize->id)
+                                        @if (in_array($size->id,$productSizes))
                                             <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>
                                         @endif
-                                    @endforeach
                                     <input type="hidden" name="sizes[]" value="{{$size->id}}">
                                 </li>
                             @endforeach
@@ -167,8 +165,8 @@
             $(this).addClass('checked-for-main');
             $(this).addClass('opacity-50')
 
-            $.ajax('/mainImage/', {
-                method: 'PUT',
+            $.ajax('/main-image', {
+                method: 'POST',
                 dataType: 'Json',
                 data: {product_id, image_name},
                 headers: {
@@ -216,7 +214,7 @@
             $('.remove-image').click(function () {
                 const image_id = $(this).data('image-id');
                 const product_id = $(this).data('product-id');
-                $.ajax('/removeImage/' + image_id, {
+                $.ajax('/remove-image/' + image_id, {
                     method: 'DELETE',
                     dataType: 'Json',
                     data: {product_id},

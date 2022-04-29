@@ -28,6 +28,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+
+
     <div id="app">
         <div class="fixed-top">
         <nav class="navbar navbar-expand-md navbar-light bg-dark shadow-sm">
@@ -89,10 +91,10 @@
         <div class="container-fluid bg-dark bg-gradient">
             <div class="container">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-gradient">
-                    <a class="navbar-brand" href="#">
+                    <span class="navbar-brand all-categories">
                         <i class="fa fa-bars" aria-hidden="true"></i>
                         All
-                    </a>
+                    </span>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -132,18 +134,10 @@
             </div>
         </div>
         </div>
+
         <main class="py-4" style="margin-top: 110px">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="category-list">
-                            categories
-                        </div>
-                    </div>
-                    <div class="col-lg-9">
-                        @yield('content')
-                    </div>
-                </div>
+                    @yield('content')
             </div>
         </main>
     </div>

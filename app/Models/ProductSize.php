@@ -15,4 +15,5 @@ class ProductSize extends Model
         'size_id',
         'product_id'
     ];
+
 }

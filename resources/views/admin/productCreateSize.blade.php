@@ -14,7 +14,7 @@
                 <button type="submit" class="btn btn-primary mt-4 add-menu-item">Add size</button>
             </form>
             <div>
-                <a href="{{ url('adminSize/back') }}" class="d-inline-block"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
+                <a href="{{ route('adminSize.index') }}" class="d-inline-block"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
             </div>
         </div>
     </div>

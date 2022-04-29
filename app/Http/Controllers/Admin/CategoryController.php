@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCategorRequest;
 use App\Models\Admin\Category;
 
-class AdminController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $categories =  Category::get();
-        return view('admin.adminHome',compact('categories'));
+        $categories = Category::get();
+
+        return view('admin.adminHome', compact('categories'));
     }
 
     /**
@@ -25,8 +26,9 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $categories =  Category::get();
-        return view('admin.createCategory',compact('categories'));
+        $categories = Category::get();
+
+        return view('admin.createCategory', compact('categories'));
     }
 
     /**
@@ -37,6 +39,7 @@ class AdminController extends Controller
      */
     public function store(AdminCategorRequest $request)
     {
+
         $category = new Category;
         $category->category_name = $request->category_name;
         if ($request['category_status']) {
@@ -44,35 +47,19 @@ class AdminController extends Controller
         }
         $save = $category->save();
         if ($save) {
-            return $this->index();
+
+            return redirect()->route('admin.index');
         }
 
         return back()->with('fail', 'Something went wrong,try again later');
-
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 
         $edit_category = Category::find($id);
         $categories = Category::get();
+
         return view('admin.editCategory',compact('edit_category','categories'));
     }
 
@@ -87,12 +74,14 @@ class AdminController extends Controller
     {
         $category = Category::find($id);
         if (!$category) {
+
             return redirect()->back();
         }
         $category->update([
                 "category_name" => $request->category_name,
                 "parent_id" => $request->category_status,
             ]);
+
             return redirect()->route('admin.index');
     }
 
@@ -113,8 +102,4 @@ class AdminController extends Controller
         return response()->json();
     }
 
-    public function cancel()
-    {
-        return $this->index();
-    }
 }

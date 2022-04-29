@@ -13,11 +13,52 @@
 body{
     background: #f0f0f0;
 }
+
+.all-categories {
+    cursor: pointer;
+}
 .category-list {
-    background-color: #bacbe6;
     height: 100vh;
-    position: fixed;
     width: 16%;
+    position: fixed;
+    padding: 20px;
+    padding-right: 0;
+    transition: all 0.7s ease;
+
+    li {
+        position: relative;
+        display: list-item;
+        color: #fff;
+        transition: all 0.5s ease;
+        cursor: pointer;
+
+        //&:hover {
+        //    color: lightsalmon;
+        //}
+
+        a {
+            font-size: 24px;
+            text-decoration: none;
+            color: inherit;
+            //.sub-category-arrow {
+            //    position: absolute;
+            //    right: 0;
+            //    top: 20%;
+            //}
+        }
+
+        .sub-menu-1 {
+            //width: 16%;
+            padding: 20px 0 20px 20px;
+            //position: absolute;
+            //right: 0;
+            //top: 0;
+            background: #000;
+            border: 1px solid red;
+            display: block;
+        }
+
+    }
 }
 
 ul{
@@ -91,6 +132,21 @@ ul{
     left: 2px;
     color: lightsteelblue;
     font-size: 38px;
+}
 
+.back {
+    position: relative;
+    display: block;
+    .go-back {
+        font-size: 50px;
+        color: darkorange;
+    }
+
+    span {
+        position: absolute;
+        left: 20px;
+        top: 0;
+        color: darkorange;
+    }
 }
 

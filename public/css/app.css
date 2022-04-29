@@ -15860,11 +15860,35 @@ body {
   background: #f0f0f0;
 }
 
+.all-categories {
+  cursor: pointer;
+}
+
 .category-list {
-  background-color: #bacbe6;
   height: 100vh;
-  position: fixed;
   width: 16%;
+  position: fixed;
+  padding: 20px;
+  padding-right: 0;
+  transition: all 0.7s ease;
+}
+.category-list li {
+  position: relative;
+  display: list-item;
+  color: #fff;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+.category-list li a {
+  font-size: 24px;
+  text-decoration: none;
+  color: inherit;
+}
+.category-list li .sub-menu-1 {
+  padding: 20px 0 20px 20px;
+  background: #000;
+  border: 1px solid red;
+  display: block;
 }
 
 ul {
@@ -15934,4 +15958,19 @@ ul li a {
   left: 2px;
   color: lightsteelblue;
   font-size: 38px;
+}
+
+.back {
+  position: relative;
+  display: block;
+}
+.back .go-back {
+  font-size: 50px;
+  color: darkorange;
+}
+.back span {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  color: darkorange;
 }

@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <div>
+        <a href="{{route('welcome.index')}}" class="back"><i class="fa fa-long-arrow-left go-back" aria-hidden="true"></i><span class="back-text">back</span></a>
+    </div>
     <div class="row">
         @foreach($products as $product)
             <div class="col-lg-6 mt-4">
@@ -10,7 +13,7 @@
                     </div>
                     <div class="p-3">
                         <h3><a href="{{route('product.show',$product->id)}}"
-                               class="text-black text-decoration-none">{{Str::limit($product->product_name,30)}}</a>
+                               class="text-black text-decoration-none">{{Str::limit($product->product_name,25)}}</a>
                         </h3>
                         <p>{{Str::limit($product->description,50)}}</p>
                         <p class="price">{{$product->price}}<sup class="price-sup"> 00</sup> $</p>
@@ -19,10 +22,10 @@
                         <button class="btn btn-danger delete-product" data-id="{{$product->id}}" data-bs-toggle="modal"
                                 data-bs-target="#deleteModal">Delete
                         </button>
-                        <button class="btn btn-warning"><a href="{{route('product.edit',$product->id)}}"
-                                                           class="text-white">Edit</a></button>
+                        <a href="{{route('product.edit',$product->id)}}">
+                            <button class="btn btn-warning text-white">Edit</button>
+                        </a>
                     </div>
-
                 </div>
             </div>
         @endforeach

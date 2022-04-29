@@ -1,3 +1,5 @@
+import {isVisible} from "bootstrap/js/src/util";
+
 require('./bootstrap');
 import $ from 'jquery';
 window.$ = window.jQuery = $;

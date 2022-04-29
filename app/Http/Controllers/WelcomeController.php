@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
     public function index() {
+        $categories = Category::with(['subCategories'])->whereNull('parent_id')->get();
         $products = Product::get();
-        return view('welcome',compact('products'));
+        return view('product.welcome',compact('products','categories'));
     }
+
 }

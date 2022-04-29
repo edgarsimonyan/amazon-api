@@ -20,7 +20,7 @@
             <button type="submit" class="btn btn-primary mt-4 add-menu-item">Add</button>
         </form>
         <div>
-            <a href="{{url('admin/back')}}"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
+            <a href="{{route('admin.index')}}"><button class="btn btn-warning mt-4 add-menu-item">Cancel</button></a>
         </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ class ProductSizeController extends Controller
     public function index()
     {
         $sizes =  Size::get();
+
         return view('admin.productSize',compact('sizes'));
     }
 
@@ -38,11 +39,13 @@ class ProductSizeController extends Controller
     {
         $ProductSize = new Size;
         $ProductSize->size = $request->size;
-            $save = $ProductSize->save();
-            if ($save) {
-                return back()->with('success', 'New category has successfully added in database');
-            }
-            return back()->with('fail', 'Something went wrong,try again later');
+        $save = $ProductSize->save();
+        if ($save) {
+
+            return back()->with('success', 'New category has successfully added in database');
+        }
+
+        return back()->with('fail', 'Something went wrong,try again later');
     }
 
     /**
@@ -51,20 +54,11 @@ class ProductSizeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $edit_size = Size::find($id);
+
         return view('admin.editSize',compact('edit_size'));
     }
 
@@ -79,11 +73,13 @@ class ProductSizeController extends Controller
     {
         $size = Size::find($id);
         if (!$size) {
+
             return redirect()->back();
         }
         $size->update([
             "size" => $request->size,
         ]);
+
         return redirect()->route('adminSize.index');
     }
 
@@ -98,10 +94,12 @@ class ProductSizeController extends Controller
         $size = Size::find($id);
 
         if (!$size) {
+
             return redirect()->back();
         }
 
         $size->delete();
+
         return response()->json();
     }
 }

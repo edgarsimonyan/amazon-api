@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductColorRequest;
 use App\Models\Admin\Color;
+use App\Models\Product;
 
 class ProductColorController extends Controller
 {
@@ -15,8 +16,9 @@ class ProductColorController extends Controller
      */
     public function index()
     {
-        $colors =  Color::get();
-        return view('admin.productColor',compact('colors'));
+        $colors = Color::get();
+
+        return view('admin.productColor', compact('colors'));
     }
 
     /**
@@ -37,25 +39,18 @@ class ProductColorController extends Controller
      */
     public function store(ProductColorRequest $request)
     {
-        $ProductColor = new Color;
-        $ProductColor->color = $request->color;
+        $ProductColor = Color::create([
+            'color' => $request->color
+        ]);
         $save = $ProductColor->save();
         if ($save) {
-            return $this->index();
+
+            return redirect()->route('adminColor.index');
         }
+
         return back()->with('fail', 'Something went wrong,try again later');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -66,7 +61,8 @@ class ProductColorController extends Controller
     public function edit($id)
     {
         $edit_color = Color::find($id);
-        return view('admin.editColor',compact('edit_color'));
+
+        return view('admin.editColor', compact('edit_color'));
     }
 
     /**
@@ -80,11 +76,13 @@ class ProductColorController extends Controller
     {
         $color = Color::find($id);
         if (!$color) {
+
             return redirect()->back();
         }
         $color->update([
             "color" => $request->color,
         ]);
+
         return redirect()->route('adminColor.index');
     }
 

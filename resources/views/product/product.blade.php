@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <div>
+        <a href="{{route('home')}}" class="back"><i class="fa fa-long-arrow-left go-back" aria-hidden="true"></i><span class="back-text">back</span></a>
+    </div>
     <div class="container">
         <h1>Create Product</h1>
         <div class="row">

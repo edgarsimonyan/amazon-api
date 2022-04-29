@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductColorController;
 use App\Http\Controllers\Admin\ProductSizeController;
 use App\Http\Controllers\ProductController;
@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[WelcomeController::class, 'index'])->name('welcome.index');
+Route::get('/categories',[WelcomeController::class, 'categories'])->name('welcome.categories');
 
 Auth::routes();
 
@@ -30,31 +31,26 @@ Route::group([
 
 ], function () {
 
-    Route::post('/addImage/{id}', [ProductController::class,'addProductImage'])->name('product.addProductImage');
-    Route::put('/mainImage/', [ProductController::class,'mainImage'])->name('product.mainImage');
-    Route::delete('/removeImage/{id}', [ProductController::class,'removeImage'])->name('product.removeImage');
-    Route::get('/allProducts/{id}', [ProductController::class,'myProducts'])->name('product.myProducts');
+    Route::post('/add-image/{id}', [ProductController::class, 'addProductImage'])->name('product.addProductImage');
+    Route::post('/main-image/', [ProductController::class, 'mainImage'])->name('product.mainImage');
+    Route::delete('/remove-image/{id}', [ProductController::class, 'removeImage'])->name('product.removeImage');
+    Route::get('/all-products/{id}', [ProductController::class, 'myProducts'])->name('product.myProducts');
 
 Route::group([
     'middleware' => 'isAdmin',
-],function(){
-        Route::get('/adminColor/back/', function () {
-            return redirect()->route('adminColor.index');
-        });
-        Route::get('/adminSize/back/', function () {
-            return redirect()->route('adminSize.index');
-        });
-        Route::get('/admin/back/', function () {
-            return redirect()->route('admin.index');
-        });
+], function() {
 
-        Route::resource('admin', AdminController::class);
-        Route::resource('adminSize', ProductSizeController::class);
-        Route::resource('adminColor', ProductColorController::class);
+    Route::resource('admin', CategoryController::class, [
+        'except' => [ 'show' ]
+    ]);
+    Route::resource('adminSize', ProductSizeController::class, [
+        'except' => [ 'show' ]
+    ]);
+    Route::resource('adminColor', ProductColorController::class, [
+        'except' => [ 'show' ]
+    ]);
 });
 
 });
 
 Route::resource('product', ProductController::class);
-
-
