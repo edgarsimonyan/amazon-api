@@ -42,9 +42,11 @@
                                 @foreach ($colors as $color)
                                     <li class="d-inline-block check-color" data-id="{{$color->id}}"
                                         style="width: 35px; height: 35px; background-color: {{$color->color}}">
-                                            @if (in_array($color->id,$productColors))
+                                        @foreach($productColors as $productColorId)
+                                            @if ($color->id == $productColorId)
                                                 <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>
                                             @endif
+                                        @endforeach
                                         <input type="hidden" name="colors[]" value="{{ $color->id }}">
                                     </li>
                                 @endforeach
@@ -57,9 +59,11 @@
                         <ul class="d-flex">
                             @foreach($sizes as $size)
                                 <li data-id="{{$size->id}}" class="check-size">{{$size->size}}
-                                        @if (in_array($size->id,$productSizes))
+                                    @foreach($productSizes as $productSizeId)
+                                        @if ($size->id == $productSizeId)
                                             <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>
                                         @endif
+                                    @endforeach
                                     <input type="hidden" name="sizes[]" value="{{$size->id}}">
                                 </li>
                             @endforeach

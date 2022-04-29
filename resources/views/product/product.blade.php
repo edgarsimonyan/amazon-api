@@ -42,7 +42,7 @@
                         <div class="w-50">
                             <ul>
                                 @foreach($colors as $color)
-                                    <li class="d-inline-block check-color" data-id="{{$color->id}}" style="width: 30px; height: 30px; background-color: {{$color->color}}">
+                                    <li class="d-inline-block check-color" data-id="{{$color->id}}" style="width: 35px; height: 35px; background-color: {{$color->color}}">
                                         <input type="hidden" name="colors[]">
                                     </li>
                                 @endforeach
@@ -145,12 +145,23 @@
                 const value = $(this).children().val() ? null : $(this).data('id')
 
                 $(this).children().val(value)
+                if (value) {
+                    $(this).append(' <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>');
+                }
+                else {
+                    $(this).find('.checked-icon').remove();
+                }
 
             })
             $('.check-color').click(function () {
                 const value = $(this).children().val() ? null : $(this).data('id')
                 $(this).children().val(value)
-
+                if (value) {
+                    $(this).append(' <i class="fa fa-check-square-o checked-icon" aria-hidden="true"></i>');
+                }
+                else {
+                    $(this).find('.checked-icon').remove();
+                }
             })
         })
     </script>

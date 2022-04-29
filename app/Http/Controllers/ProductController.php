@@ -23,8 +23,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::get();
-
-        return view('product.welcome', compact('products'));
+        $categories = Category::with(['subCategories'])->whereNull('parent_id')->get();
+        return view('product.welcome', compact('products','categories'));
     }
 
     /**
@@ -124,19 +124,14 @@ class ProductController extends Controller
     {
         $product = Product::where('user_id', session('user')['id'])->find($id);
         if ($product) {
-            $productSizes = [];
-            $productColors = [];
 
             $images = $product->productImages()->get();
             $productSize = $product->sizes()->get();
-            for ($i = 0; $i < count($productSize); $i++) {
-                array_push($productSizes, $productSize[$i]->id);
-            }
+
+            $productSizes = $productSize->pluck('id');
 
             $productColor = $product->colors()->get();
-            for ($k = 0; $k < count($productColor); $k++) {
-                array_push($productColors, $productColor[$k]->id);
-            }
+            $productColors =  $productColor->pluck('id');
 
             $sizes = Size::all();
             $categories = Category::all();
@@ -182,8 +177,7 @@ class ProductController extends Controller
             $product->colors()->sync($colors);
             $product->sizes()->sync($sizes);
             if ($update) {
-
-                return redirect()->route('product.index');
+                return redirect()->route('welcome.index');
             }
         }
     }
@@ -229,12 +223,10 @@ class ProductController extends Controller
             for ($i = 0; $i < count($request->images); $i++) {
                 $image_name = time() . $i . '.' . $request->images[$i]->extension();
                 $request->images[$i]->move(public_path('images/product-images'), $image_name);
-                $data[$i] =
-                      [
-                        'product_id' => $id,
-                        'image_name' => $image_name,
-                    ];
-
+                $data[] = [
+                    'product_id' => $id,
+                    'image_name' => $image_name,
+                ];
             }
             $product->productImages()->insert($data);
 
